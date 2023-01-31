@@ -14,9 +14,8 @@ const app = express();
 const server = http.createServer(app);
 const httpServer = server.listen(PORT);
 const io = new SocketServer(httpServer, {
-  allowRequest: (req, callback) => {
-    const noOriginHeader = req.headers.origin === undefined;
-    callback(null, noOriginHeader);
+  cors: {
+    origin: 'https://exhibidores-compartir.netlify.app',
   },
 });
 Sockets(io);
