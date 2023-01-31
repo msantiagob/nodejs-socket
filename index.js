@@ -18,7 +18,7 @@ const io = new SocketServer(httpServer, {
     origin: 'https://exhibidores-compartir.netlify.app',
   },
 });
-console.log('asd ' + cors.origin);
+console.log('asd ' + 'dio');
 Sockets(io);
 
 // Middlewares
