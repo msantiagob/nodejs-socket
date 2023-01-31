@@ -15,7 +15,7 @@ const server = http.createServer(app);
 const httpServer = server.listen(PORT);
 const io = new SocketServer(httpServer, {
   cors: {
-    origin: process.env.URL_CLIENT,
+    origin: URL_CLIENT,
   },
 });
 Sockets(io);
