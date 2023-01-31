@@ -13,7 +13,12 @@ connectDB();
 const app = express();
 const server = http.createServer(app);
 const httpServer = server.listen(PORT);
-const io = new SocketServer(httpServer, {});
+const io = new SocketServer(httpServer, {
+  cors: {
+    origin: 'https://exhibidores-compartir.netlify.app/',
+    methods: ['GET', 'POST'],
+  },
+});
 Sockets(io);
 
 // Middlewares
