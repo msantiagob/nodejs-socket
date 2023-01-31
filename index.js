@@ -15,7 +15,7 @@ const server = http.createServer(app);
 const httpServer = server.listen(PORT);
 const io = new SocketServer(httpServer, {
   cors: {
-    origin: URL_CLIENT,
+    origin: 'https://exhibidores-compartir.netlify.app/',
   },
 });
 Sockets(io);
