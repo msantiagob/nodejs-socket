@@ -9,7 +9,7 @@ export default (io) => {
       const SantaRita = await santaRita.find();
       io.emit('loadSchedules', { Bomberos, Ciudadela, SantaRita });
     };
-    console.log('asd ' + 'dio');
+
     emitSchedules();
     socket.on('bomberos', async (Bomberos) => {
       const allBomberos = await bomberos.find();

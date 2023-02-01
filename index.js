@@ -5,7 +5,7 @@ import { Server as SocketServer } from 'socket.io';
 import Sockets from './src/socket.js';
 
 import { connectDB } from './src/db.js';
-import { PORT } from './src/config.js';
+import { PORT, URL_CLIENT } from './src/config.js';
 import cors from 'cors';
 
 connectDB();
@@ -13,12 +13,12 @@ connectDB();
 const app = express();
 const server = http.createServer(app);
 const httpServer = server.listen(PORT);
+
 const io = new SocketServer(httpServer, {
   cors: {
-    origin: 'https://exhibidores-compartir.netlify.app',
+    origin: URL_CLIENT,
   },
 });
-console.log('asd ' + 'dio');
 Sockets(io);
 
 // Middlewares
