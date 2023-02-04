@@ -3,6 +3,12 @@ import ciudadela from '../models/ciudadela.js';
 import santaRita from '../models/santaRita.js';
 export default (io) => {
   io.on('connection', (socket) => {
+    console.log('sockets connectados:', {
+      Hora: socket.handshake.time,
+      url: socket.handshake.headers.host,
+      Devide: socket.handshake.address,
+    });
+
     const emitSchedules = async () => {
       const Bomberos = await bomberos.find();
       const Ciudadela = await ciudadela.find();
@@ -18,10 +24,18 @@ export default (io) => {
 
       socket.broadcast.emit('bomberos', [
         {
-          ...Bomberos,
+          ...savedBomberos._doc,
         },
         ...allBomberos,
       ]);
+      emitSchedules();
+    });
+    socket.on('bomberos:delete', async (scheduleId) => {
+      const deleteBomberos = await bomberos.findByIdAndDelete(scheduleId);
+      const allBomberos = await bomberos.find();
+
+      socket.broadcast.emit('bomberos', [...allBomberos]);
+      emitSchedules();
     });
     socket.on('santa rita', async (SantaRita) => {
       const allSantaRita = await santaRita.find();
@@ -30,10 +44,18 @@ export default (io) => {
 
       socket.broadcast.emit('santa rita', [
         {
-          ...SantaRita,
+          ...savedSantaRita._doc,
         },
         ...allSantaRita,
       ]);
+      emitSchedules();
+    });
+    socket.on('santa rita:delete', async (scheduleId) => {
+      const deleteSantaRita = await santaRita.findByIdAndDelete(scheduleId);
+      const allSantaRita = await santaRita.find();
+
+      socket.broadcast.emit('santa rita', [...allSantaRita]);
+      emitSchedules();
     });
     socket.on('ciudadela', async (Ciudadela) => {
       const allCiudadela = await ciudadela.find();
@@ -42,10 +64,18 @@ export default (io) => {
 
       socket.broadcast.emit('ciudadela', [
         {
-          ...Ciudadela,
+          ...savedBomberos._doc,
         },
         ...allCiudadela,
       ]);
+      emitSchedules();
+    });
+    socket.on('ciudadela:delete', async (scheduleId) => {
+      const deleteCiudadela = await ciudadela.findByIdAndDelete(scheduleId);
+      const allCiudadela = await ciudadela.find();
+
+      socket.broadcast.emit('ciudadela', [...allCiudadela]);
+      emitSchedules();
     });
   });
 };
