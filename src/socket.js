@@ -32,11 +32,11 @@ export default (io) => {
       ]);
       emitSchedules();
     });
-    socket.on('bomberos:delete', async (scheduleId) => {
-      const deleteBomberos = await bomberos.findByIdAndDelete(scheduleId);
-      const allBomberos = await bomberos.find();
+    socket.on('compartir:delete', async (scheduleId) => {
+      const deleteCompartir = await compartir.findByIdAndDelete(scheduleId);
+      const allCompartir = await compartir.find();
 
-      socket.broadcast.emit('bomberos', [...allBomberos]);
+      socket.broadcast.emit('compartir', [...allCompartir]);
       emitSchedules();
     });
     socket.on('bomberos', async (Bomberos) => {
