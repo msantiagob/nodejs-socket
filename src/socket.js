@@ -1,4 +1,5 @@
 import bomberos from '../models/bomberos.js';
+import compartir from '../models/compartir.js';
 import ciudadela from '../models/ciudadela.js';
 import santaRita from '../models/santaRita.js';
 export default (io) => {
@@ -10,13 +11,34 @@ export default (io) => {
     });
 
     const emitSchedules = async () => {
+      const Compartir = await compartir.find();
       const Bomberos = await bomberos.find();
       const Ciudadela = await ciudadela.find();
       const SantaRita = await santaRita.find();
-      io.emit('loadSchedules', { Bomberos, Ciudadela, SantaRita });
+      io.emit('loadSchedules', { Compartir, Bomberos, Ciudadela, SantaRita });
     };
 
     emitSchedules();
+    socket.on('compartir', async (Compartir) => {
+      const allCompartir = await compartir.find();
+      const newCompartir = new compartir(Compartir);
+      const savedCompartir = await newCompartir.save();
+
+      socket.broadcast.emit('compartir', [
+        {
+          ...savedCompartir._doc,
+        },
+        ...allCompartir,
+      ]);
+      emitSchedules();
+    });
+    socket.on('bomberos:delete', async (scheduleId) => {
+      const deleteBomberos = await bomberos.findByIdAndDelete(scheduleId);
+      const allBomberos = await bomberos.find();
+
+      socket.broadcast.emit('bomberos', [...allBomberos]);
+      emitSchedules();
+    });
     socket.on('bomberos', async (Bomberos) => {
       const allBomberos = await bomberos.find();
       const newBomberos = new bomberos(Bomberos);
